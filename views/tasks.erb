@@ -3,3 +3,52 @@
     <li> </p> <%= task.description %> </p>
   <% end %>
 </ul>
+
+<ul class="nes-list">
+    ....
+
+    <% @tasks.all.each_with_index do |task, index| %>
+        <% if task.done? %>
+          <li>
+            <p class="nes-text is-disabled"> <%= task.description %> </p>
+          </li>
+      <% else %>
+          <li>
+            <p class="nes-text"> <%= task.description %>
+              <span class="nes-text is-primary"
+                        hx-post=<%= "tasks/#{index}"%>
+                        hx-target=".nes-list"
+                        hx-swap="outerHTML"
+                        hx-include=<%="[name=_method][data-mark='#{index}']"%>> done
+              </span>
+              <input type="hidden" name="_method" value="patch" data-mark=<%="#{index}" %>>
+            </p>
+          </li>
+      <% end %>
+    <% end %>
+</ul>
+
+
+<ul class="nes-list is-disc">
+
+....
+
+    <% @tasks.all.each_with_index do |task, index| %>
+        <% if task.done? %>
+      <li>
+        <p class="nes-text is-disabled"> <%= task.description %>
+          <i hx-post=<%= "tasks/#{index}"%>
+                hx-target=".nes-list"
+                hx-swap="outerHTML"
+                class="nes-icon close is-small"
+                hx-include=<%= "[name=_method][data-delete='#{index}']" %>>
+          </i>
+        </p>
+          <input type="hidden" name="_method" value="delete" data-delete=<%= "#{index}" %>>
+      </li>
+      <% else %>
+            <!-- view logic for marking task as done -->
+            ....
+      <% end %>
+    <% end %>
+</ul>
